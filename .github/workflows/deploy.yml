@@ -1,32 +1,31 @@
-name: Deploy Portfolio
+name: Fetch and Deploy Data
 
 on:
   push:
     branches:
-      - main  # This will trigger deployment on pushes to the 'main' branch.
+      - main  # Trigger on push to main branch
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest version of Ubuntu for the build environment.
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3  # Checkout the code from the repository.
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'  # Use the Node.js version you need.
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Use the required Node.js version
 
-    - name: Install dependencies
-      run: npm install  # Install the dependencies specified in package.json.
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build Portfolio
-      run: npm run build  # Build your portfolio for production.
+      - name: Run fetch script
+        run: node fetch.js
 
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: main  # This will deploy to the 'gh-pages' branch.
-        folder: build  # This is the directory where your built files are located.
-        token: ${{ secrets.GITHUB_TOKEN }}  # Use the default GitHub token for authentication.
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: main
+          folder: build  # Folder where the build is stored
