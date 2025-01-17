@@ -1,31 +1,29 @@
-name: Fetch and Deploy Data
+name: Build and Deploy Portfolio
 
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
+      - main
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
-    
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Use the required Node.js version
+          node-version: '16' # or the version you're using
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run fetch script
-        run: node fetch.js
-
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: main
-          folder: build  # Folder where the build is stored
+      - name: Build project
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token is provided by GitHub Actions
+          GITHUB_USERNAME: ${{ secrets.GITHUB_USERNAME }}  # GitHub username as a secret
+          USE_GITHUB_DATA: "true"
